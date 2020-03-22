@@ -7,16 +7,43 @@ const finalMessage = document.getElementById("final-message");
 
 const figureParts = document.querySelectorAll(".figure-part");
 
-const words = ["application", "programming", "interface", "wizard"];
+let words;
 
-let selectedWord = words[Math.floor(Math.random() * words.length)];
+let url = "https://random-word-api.herokuapp.com//word?number=10";
+
+// const selectedWord = "";
+
+// async function takeArandomWord() {
+//   fetch(url)
+//     .then(res => res.json())
+//     .then(data => {
+//       console.log(data);
+//       words = data;
+//       console.log(words);
+//     });
+//   // displayWord();
+// }
+
+// takeArandomWord();
+
+// let selectedWord = words[Math.floor(Math.random() * words.length)];
 
 const correctLetters = [];
 const wrongLetters = [];
 
 // Show hidden word
 function displayWord() {
-  wordEl.innerHTML = `
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+      words = data;
+      console.log(words);
+
+      selectedWord = words[Math.floor(Math.random() * words.length)];
+      console.log(selectedWord);
+
+      wordEl.innerHTML = `
   ${selectedWord
     .split("")
     .map(
@@ -28,12 +55,13 @@ function displayWord() {
     .join("")}
   `;
 
-  const innerWord = wordEl.innerText.replace(/\n/g, "");
+      const innerWord = wordEl.innerText.replace(/\n/g, "");
 
-  if (innerWord === selectedWord) {
-    finalMessage.innerText = "Congratulations! You won! 😃";
-    popup.style.display = "flex";
-  }
+      if (innerWord === selectedWord) {
+        finalMessage.innerText = "Congratulations! You won! 😃";
+        popup.style.display = "flex";
+      }
+    });
 }
 
 // Update the wrong letters
@@ -99,7 +127,7 @@ window.addEventListener("keydown", e => {
   }
 });
 
-// Restar game and play again
+// Restart game and play again
 playAgainBtn.addEventListener("click", () => {
   // Empty arrays
   correctLetters.splice(0);
