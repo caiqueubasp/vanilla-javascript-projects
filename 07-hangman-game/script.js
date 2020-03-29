@@ -7,61 +7,48 @@ const finalMessage = document.getElementById("final-message");
 
 const figureParts = document.querySelectorAll(".figure-part");
 
-let words;
+let words = ["javascript", "angular", "vuejs", "html", "css"];
+// let words = [];
 
-let url = "https://random-word-api.herokuapp.com//word?number=10";
+// getFirsWord();
 
-// const selectedWord = "";
+// let url = "https://random-word-api.herokuapp.com//word?number=10";
 
-// async function takeArandomWord() {
-//   fetch(url)
-//     .then(res => res.json())
-//     .then(data => {
-//       console.log(data);
-//       words = data;
-//       console.log(words);
-//     });
-//   // displayWord();
-// }
+async function getFirsWord() {
+  const res = await fetch("https://random-word-api.herokuapp.com//word?number=10");
+  const data = await res.json();
+  console.log(data);
+  // let words = ["javascript", "angular", "vue.js", "html", "css"];
+  return words.push(data);
+  displayWord();
+}
 
-// takeArandomWord();
-
-// let selectedWord = words[Math.floor(Math.random() * words.length)];
+let selectedWord = words[Math.floor(Math.random() * words.length)];
 
 const correctLetters = [];
 const wrongLetters = [];
 
 // Show hidden word
 function displayWord() {
-  fetch(url)
-    .then(res => res.json())
-    .then(data => {
-      console.log(data);
-      words = data;
-      console.log(words);
-
-      selectedWord = words[Math.floor(Math.random() * words.length)];
-      console.log(selectedWord);
-
-      wordEl.innerHTML = `
-  ${selectedWord
-    .split("")
-    .map(
-      letter => `<span class="letter">
-    ${correctLetters.includes(letter) ? letter : " "}
-    </span>
-    `
-    )
-    .join("")}
+  wordEl.innerHTML = `
+    ${selectedWord
+      .split("")
+      .map(
+        letter => `
+          <span class="letter">
+            ${correctLetters.includes(letter) ? letter : ""}
+          </span>
+        `
+      )
+      .join("")}
   `;
 
-      const innerWord = wordEl.innerText.replace(/\n/g, "");
+  const innerWord = wordEl.innerText.replace(/\n/g, "");
 
-      if (innerWord === selectedWord) {
-        finalMessage.innerText = "Congratulations! You won! 😃";
-        popup.style.display = "flex";
-      }
-    });
+  if (innerWord === selectedWord) {
+    finalMessage.innerText = "Congratulations! You won! 😃";
+    popup.style.display = "flex";
+  }
 }
 
 // Update the wrong letters
